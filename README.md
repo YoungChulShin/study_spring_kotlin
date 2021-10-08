@@ -1,1 +1,1 @@
-# study_spring_kotlin
+# Kotlin을 이용한 스프링 실습
