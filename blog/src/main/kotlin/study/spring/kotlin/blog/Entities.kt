@@ -10,11 +10,12 @@ import javax.persistence.Id
 class Article(
     var title: String,
     var headline: String,
-    var conent: String,
+    var content: String,
     @ManyToOne var author: User,
     var slug: String = title.toSlug(),
     var addedAt: LocalDateTime = LocalDateTime.now(),
-    @Id @GeneratedValue var id: Long? = null)
+    @Id @GeneratedValue var id: Long? = null) {
+}
 
 @Entity
 class User (
