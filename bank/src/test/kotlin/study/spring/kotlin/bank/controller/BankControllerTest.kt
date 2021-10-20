@@ -32,7 +32,7 @@ internal class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$[0].accountNumber") { value("1234") }
+                    jsonPath("$[0].account_number") { value("1234") }
                 }
         }
     }
@@ -52,7 +52,7 @@ internal class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isOk() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.transactionFee") { value("17") }
+                    jsonPath("$.transaction_fee") { value("17") }
                 }
         }
 
@@ -90,9 +90,9 @@ internal class BankControllerTest @Autowired constructor(
                 .andExpect {
                     status { isCreated() }
                     content { contentType(MediaType.APPLICATION_JSON) }
-                    jsonPath("$.accountNumber") { value("abc123") }
+                    jsonPath("$.account_number") { value("abc123") }
                     jsonPath("$.trust") { value("31.415") }
-                    jsonPath("$.transactionFee") { value("2") }
+                    jsonPath("$.transaction_fee") { value("2") }
                 }
         }
 
