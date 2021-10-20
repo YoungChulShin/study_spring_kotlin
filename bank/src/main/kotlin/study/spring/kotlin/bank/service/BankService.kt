@@ -1,11 +1,13 @@
 package study.spring.kotlin.bank.service
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import study.spring.kotlin.bank.datasource.BankDataSource
 import study.spring.kotlin.bank.model.Bank
 
 @Service
-class BankService(private val dataSource: BankDataSource) {
+class BankService(@Qualifier("network") private val dataSource: BankDataSource) {
 
     fun getBanks(): Collection<Bank> = dataSource.retrieveBanks()
 
