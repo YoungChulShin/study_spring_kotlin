@@ -4,6 +4,7 @@ import fastcampus.issueservice.domain.enums.IssuePriority
 import fastcampus.issueservice.domain.enums.IssueStatus
 import fastcampus.issueservice.domain.enums.IssueType
 import javax.persistence.*
+import javax.xml.stream.events.Comment
 
 @Entity
 @Table(name = "issue")
@@ -15,6 +16,10 @@ class Issue (
 
     @Column
     var userId: Long,
+
+    @OneToMany(fetch = FetchType.EAGER)
+    var comments: MutableList<Comment> = mutableListOf(),
+
 
     @Column
     var summary: String,
