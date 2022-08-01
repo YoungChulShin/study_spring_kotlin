@@ -4,7 +4,6 @@ import fastcampus.issueservice.domain.enums.IssuePriority
 import fastcampus.issueservice.domain.enums.IssueStatus
 import fastcampus.issueservice.domain.enums.IssueType
 import javax.persistence.*
-import javax.xml.stream.events.Comment
 
 @Entity
 @Table(name = "issue")
