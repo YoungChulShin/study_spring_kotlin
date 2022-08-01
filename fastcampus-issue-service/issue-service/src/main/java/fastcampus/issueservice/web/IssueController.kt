@@ -7,6 +7,7 @@ import fastcampus.issueservice.service.IssueService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -35,4 +36,11 @@ class IssueController(
         authUser: AuthUser,
         @PathVariable(name = "id") issueId: Long
     ) = issueService.get(issueId)
+
+    @PutMapping("/{id")
+    fun edit(
+        authUser: AuthUser,
+        @PathVariable id: Long,
+        @RequestBody request: IssueRequest
+    ) = issueService.edit(authUser.userId, id, request)
 }
