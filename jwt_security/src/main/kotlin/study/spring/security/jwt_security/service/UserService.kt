@@ -2,9 +2,9 @@ package study.spring.security.jwt_security.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import study.spring.security.jwt_security.domain.Role
 import study.spring.security.jwt_security.domain.RoleRepository
 import study.spring.security.jwt_security.domain.UserRepository
-import study.spring.security.jwt_security.service.model.CreateRoleCommand
 import study.spring.security.jwt_security.service.model.CreateUserCommand
 import study.spring.security.jwt_security.service.model.RoleInfo
 import study.spring.security.jwt_security.service.model.UserInfo
@@ -22,8 +22,8 @@ class UserService (
     }
 
     @Transactional
-    fun saveRole(command: CreateRoleCommand): RoleInfo {
-        val role = roleRepository.save(command.toEntity())
+    fun saveRole(roleName: String): RoleInfo {
+        val role = roleRepository.save(Role(name = roleName))
         return RoleInfo.from(role)
     }
 
