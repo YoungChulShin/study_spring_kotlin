@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import study.spring.security.jwt_security.domain.Role
@@ -16,8 +17,9 @@ import study.spring.security.jwt_security.service.model.UserInfo
 
 @Service
 class UserService (
+    val passwordEncoder: PasswordEncoder,
     val userRepository: UserRepository,
-    val roleRepository: RoleRepository
+    val roleRepository: RoleRepository,
 ): UserDetailsService {
 
     override fun loadUserByUsername(username: String?): UserDetails {
@@ -25,7 +27,7 @@ class UserService (
             ?: throw UsernameNotFoundException("User not found")
         val authorities = user.roles.map { SimpleGrantedAuthority(it.name) }.toMutableList()
 
-        return User(user.username, user.password, authorities)
+        return User(user.username, passwordEncoder.encode(user.password), authorities)
     }
 
     @Transactional
