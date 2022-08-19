@@ -24,6 +24,7 @@ class SecurityConfig(
         val customAuthenticationFilter = CustomAuthenticationFilter(
             authenticationManager,
             tokenProvider)
+        customAuthenticationFilter.setFilterProcessesUrl("/api/login")
 
         http.csrf().disable()
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
