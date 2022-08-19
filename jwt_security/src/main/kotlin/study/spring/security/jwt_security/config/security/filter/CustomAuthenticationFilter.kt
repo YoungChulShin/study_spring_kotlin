@@ -5,7 +5,6 @@ import org.springframework.http.MediaType
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import study.spring.security.jwt_security.config.security.TokenProvider
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse
 
 class CustomAuthenticationFilter(
     private val authManager: AuthenticationManager,
-    private val tokenProvider: TokenProvider
 ): UsernamePasswordAuthenticationFilter() {
 
     // 연동을 시도할 때, 사용자 패스워드와 비밀번호로 인증을 시도한다
@@ -38,7 +36,7 @@ class CustomAuthenticationFilter(
         authResult: Authentication?
     ) {
         val user: User = authResult?.principal as User
-        val tokenInfo = tokenProvider.issueToken(
+        val tokenInfo = TokenProvider.issueToken(
             sub = user.username,
             iss = request?.requestURL.toString(),
             user.authorities.map { it.authority }.toList()

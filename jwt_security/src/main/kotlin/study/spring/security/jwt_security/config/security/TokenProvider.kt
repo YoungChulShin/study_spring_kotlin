@@ -2,6 +2,7 @@ package study.spring.security.jwt_security.config.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -13,43 +14,48 @@ class TokenProvider {
     companion object {
         private const val JWT_SECRET: String = "secret"
         private val JWT_ALGORITHM: Algorithm = Algorithm.HMAC256(JWT_SECRET.encodeToByteArray())
+
+        fun issueToken(
+            sub: String,
+            iss: String,
+            roles: List<String>
+        ): TokenInfo {
+            val baseTime = Instant.now()
+            val accessToken = issueAccessToken(sub, iss, roles, baseTime)
+            val refreshToken = issueRefreshToken(sub, iss, baseTime)
+
+            return TokenInfo(accessToken, refreshToken)
+        }
+
+        fun verify(token: String): DecodedJWT {
+            val verifier = JWT.require(JWT_ALGORITHM).build()
+            return verifier.verify(token)
+        }
+
+        private fun issueAccessToken(
+            sub: String,
+            iss: String,
+            roles: List<String>,
+            baseTime: Instant
+        ) = JWT.create()
+            .withSubject(sub)
+            .withIssuer(iss)
+            .withExpiresAt(baseTime.plusMillis(10 * 60 * 1000))
+            .withJWTId(UUID.randomUUID().toString())
+            .withClaim("roles", roles)
+            .sign(JWT_ALGORITHM)
+
+        private fun issueRefreshToken(
+            sub: String,
+            iss: String,
+            baseTime: Instant
+        ) = JWT.create()
+            .withSubject(sub)
+            .withIssuer(iss)
+            .withExpiresAt(baseTime.plusMillis(30 * 60 * 1000))
+            .withJWTId(UUID.randomUUID().toString())
+            .sign(JWT_ALGORITHM)
     }
-
-    fun issueToken(
-        sub: String,
-        iss: String,
-        roles: List<String>
-    ): TokenInfo {
-        val baseTime = Instant.now()
-        val accessToken = issueAccessToken(sub, iss, roles, baseTime)
-        val refreshToken = issueRefreshToken(sub, iss, baseTime)
-
-        return TokenInfo(accessToken, refreshToken)
-    }
-
-    private fun issueAccessToken(
-        sub: String,
-        iss: String,
-        roles: List<String>,
-        baseTime: Instant
-    ) = JWT.create()
-        .withSubject(sub)
-        .withIssuer(iss)
-        .withExpiresAt(baseTime.plusMillis(10 * 60 * 1000))
-        .withJWTId(UUID.randomUUID().toString())
-        .withClaim("roles", roles)
-        .sign(JWT_ALGORITHM)
-
-    private fun issueRefreshToken(
-        sub: String,
-        iss: String,
-        baseTime: Instant
-    ) = JWT.create()
-        .withSubject(sub)
-        .withIssuer(iss)
-        .withExpiresAt(baseTime.plusMillis(30 * 60 * 1000))
-        .withJWTId(UUID.randomUUID().toString())
-        .sign(JWT_ALGORITHM)
 }
 
 data class TokenInfo(
