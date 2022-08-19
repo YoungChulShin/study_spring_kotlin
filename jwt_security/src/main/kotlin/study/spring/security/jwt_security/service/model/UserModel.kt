@@ -1,5 +1,6 @@
 package study.spring.security.jwt_security.service.model
 
+import org.springframework.security.crypto.password.PasswordEncoder
 import study.spring.security.jwt_security.domain.User
 
 data class CreateUserCommand (
@@ -7,11 +8,11 @@ data class CreateUserCommand (
     val username: String,
     val password: String
 ) {
-    fun toEntity(): User {
+    fun toEntity(encoder: PasswordEncoder): User {
         return User(
             name = name,
             username = username,
-            password = password)
+            password = encoder.encode(password))
     }
 }
 

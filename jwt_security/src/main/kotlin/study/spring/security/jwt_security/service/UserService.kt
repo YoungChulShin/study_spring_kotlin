@@ -27,12 +27,12 @@ class UserService (
             ?: throw UsernameNotFoundException("User not found")
         val authorities = user.roles.map { SimpleGrantedAuthority(it.name) }.toMutableList()
 
-        return User(user.username, passwordEncoder.encode(user.password), authorities)
+        return User(user.username, user.password, authorities)
     }
 
     @Transactional
     fun saveUser(command: CreateUserCommand): UserInfo {
-        val user = userRepository.save(command.toEntity())
+        val user = userRepository.save(command.toEntity(passwordEncoder))
         return UserInfo.from(user)
     }
 
