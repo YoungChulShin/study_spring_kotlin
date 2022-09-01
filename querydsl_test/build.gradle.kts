@@ -36,6 +36,8 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa")
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
 
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
+
     runtimeOnly("com.h2database:h2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
