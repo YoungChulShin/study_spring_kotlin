@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -17,7 +18,7 @@ import study.spring.security.jwt_security.config.security.filter.CustomAuthoriza
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화, preAuthorize 어노테이션 활성화
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화, preAuthorize 어노테이션 활성화
 class SecurityConfig {
     @Bean
     fun filterChain(http: HttpSecurity, authenticationManager: AuthenticationManager): SecurityFilterChain {
@@ -29,10 +30,10 @@ class SecurityConfig {
         http.authorizeHttpRequests()
             .antMatchers("/api/login/**")
             .permitAll()
-            .antMatchers(HttpMethod.GET, "/api/users/**")
-            .hasAnyAuthority("ROLE_USER")
-            .antMatchers(HttpMethod.POST, "/api/users/save/**")
-            .hasAnyAuthority("ROLE_ADMIN")
+//            .antMatchers(HttpMethod.GET, "/api/users/**")
+//            .hasAnyAuthority("ROLE_USER", "ROLE_MANAGER", "ROLE_ADMIN")
+//            .antMatchers(HttpMethod.POST, "/api/users/save/**")
+//            .hasAnyAuthority("ROLE_ADMIN")
             .anyRequest()
             .authenticated()
         http.addFilter(customAuthenticationFilter)
