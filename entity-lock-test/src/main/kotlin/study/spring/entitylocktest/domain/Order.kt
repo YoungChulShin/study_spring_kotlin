@@ -5,12 +5,16 @@ import javax.persistence.*
 @Entity
 @Table(name = "orders")
 class Order(
-    var status: String,
-    var destination: String,
-    var amount: Int,
+    private var status: String,
+    private var destination: String,
+    private var amount: Int,
 ) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    fun changeStatus(newStatus: String) {
+        this.status = newStatus
+    }
 }

@@ -10,5 +10,5 @@ interface OrderRepository : JpaRepository<Order, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select o from Order o where o.id = :id")
-    fun findByIdForUpdate(@Param("id") id: Long): Order
+    fun findByIdForUpdate(@Param("id") id: Long): Order?
 }
