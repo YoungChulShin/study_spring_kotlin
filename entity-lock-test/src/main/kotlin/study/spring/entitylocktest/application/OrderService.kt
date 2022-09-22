@@ -19,7 +19,7 @@ class OrderService(
     @Transactional
     fun updateOrderStatus(id: Long, status: String): Order {
         val order = repository.findByIdForUpdate(id) ?: throw IllegalArgumentException("오더 정보가 없습니다. $id")
-        order.changeStatus("Delivered")
+        order.changeStatus(status)
 
         return order
     }

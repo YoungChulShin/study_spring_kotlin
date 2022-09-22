@@ -33,4 +33,19 @@ internal class OrderServiceTest {
         Assertions.assertThat(findOrder.get().getStatus()).isEqualTo(status)
         Assertions.assertThat(findOrder.get().getAmount()).isEqualTo(amount)
     }
+
+    @Test
+    fun `오더 상태 업데이트`() {
+        // given
+        val status = "Created"
+        val destination = "서울시 강동구 상암로"
+        val amount = 10000
+        val order = orderService.createOrder(status, destination, amount)
+
+        // when
+        val updateOrder = orderService.updateOrderStatus(order.id!!, "Delivered")
+
+        // then
+        Assertions.assertThat(updateOrder.getStatus()).isEqualTo("Delivered")
+    }
 }
