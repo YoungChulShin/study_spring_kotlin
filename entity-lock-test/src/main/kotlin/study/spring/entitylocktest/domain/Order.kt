@@ -17,4 +17,10 @@ class Order(
     fun changeStatus(newStatus: String) {
         this.status = newStatus
     }
+
+    fun getAmount() = this.amount
+
+    fun getStatus() = this.status
+
+    fun getDestination() = this.destination
 }
