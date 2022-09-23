@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 import study.spring.entitylocktest.domain.OrderRepository
+import java.util.concurrent.CompletableFuture
 
 @SpringBootTest
 internal class OrderServiceTest {
@@ -47,5 +49,33 @@ internal class OrderServiceTest {
 
         // then
         Assertions.assertThat(updateOrder.getStatus()).isEqualTo("Delivered")
+    }
+
+    @Test
+    fun `오더 선점잠금 테스트`() {
+        // given
+        val status = "Created"
+        val destination = "서울시 강동구 상암로"
+        val amount = 10000
+        val order = orderService.createOrder(status, destination, amount)
+
+        // when
+        val supplyAsync1 = CompletableFuture.supplyAsync {
+            orderService.updateOrderStatusWithLongTask(
+                order.id!!,
+                "Delivered"
+            )
+        }
+        val supplyAsync2 = CompletableFuture.supplyAsync {
+            orderService.updateOrderStatusWithLongTask(
+                order.id!!,
+                "Cancelled"
+            )
+        }
+
+        CompletableFuture.allOf(supplyAsync1, supplyAsync2).get()
+
+
+        // then
     }
 }
