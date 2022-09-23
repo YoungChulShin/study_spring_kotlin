@@ -14,6 +14,9 @@ class Order(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
+    @Version
+    var version: Int? = null
+
     fun changeStatus(newStatus: String) {
         this.status = newStatus
     }

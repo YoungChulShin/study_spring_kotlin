@@ -1,13 +1,16 @@
 package study.spring.entitylocktest.application
 
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.transaction.annotation.Transactional
 import study.spring.entitylocktest.domain.OrderRepository
 import java.util.concurrent.CompletableFuture
+import kotlin.reflect.typeOf
 
 @SpringBootTest
 internal class OrderServiceTest {
@@ -74,8 +77,35 @@ internal class OrderServiceTest {
         }
 
         CompletableFuture.allOf(supplyAsync1, supplyAsync2).get()
+    }
 
+    @Test
+    fun `오더 비선점 잠금 테스트`() {
+        // given
+        val status = "Created"
+        val destination = "서울시 강동구 상암로"
+        val amount = 10000
+        val order = orderService.createOrder(status, destination, amount)
 
-        // then
+        // when
+        val supplyAsync1 = CompletableFuture.supplyAsync {
+            orderService.updateOrderStatusWithoutLock(
+                order.id!!,
+                "Delivered"
+            )
+        }
+        val supplyAsync2 = CompletableFuture.supplyAsync {
+            orderService.updateOrderStatusWithoutLock(
+                order.id!!,
+                "Cancelled"
+            )
+        }
+
+        val runCatching = kotlin.runCatching { CompletableFuture.allOf(supplyAsync1, supplyAsync2).get() }
+        val exceptionOrNull = runCatching.exceptionOrNull()
+
+        Assertions.assertThat(exceptionOrNull).isNotNull
+        Assertions.assertThat(exceptionOrNull!!.cause)
+            .isInstanceOf(ObjectOptimisticLockingFailureException::class.java)
     }
 }
