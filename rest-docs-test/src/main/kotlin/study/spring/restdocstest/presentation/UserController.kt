@@ -4,7 +4,8 @@ import org.springframework.web.bind.annotation.*
 import study.spring.restdocstest.application.UserService
 import study.spring.restdocstest.domain.User
 
-@RestController("/api/v1/users")
+@RestController
+@RequestMapping("/api/v1/users")
 class UserController(
     val userService: UserService,
 ) {

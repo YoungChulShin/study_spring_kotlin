@@ -3,7 +3,7 @@ package study.spring.restdocstest.domain
 import javax.persistence.*
 
 @Entity
-class User(
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
