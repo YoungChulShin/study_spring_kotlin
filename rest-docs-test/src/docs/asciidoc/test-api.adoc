@@ -1,0 +1,23 @@
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== 사용자 생성
+=== Curl request
+include::{snippets}/users/create/curl-request.adoc[]
+
+=== Http request
+include::{snippets}/users/create/http-request.adoc[]
+
+=== Http request body
+include::{snippets}/users/create/request-body.adoc[]
+
+=== Http request fields
+include::{snippets}/users/create/request-fields.adoc[]
+
+=== Http response
+include::{snippets}/users/create/response-body.adoc[]
+
+=== Http response fields
+include::{snippets}/users/create/response-fields.adoc[]

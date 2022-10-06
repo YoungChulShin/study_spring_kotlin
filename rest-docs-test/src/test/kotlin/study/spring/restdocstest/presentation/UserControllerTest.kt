@@ -102,14 +102,15 @@ internal class UserControllerTest {
             .andExpect(jsonPath("gender").value("MALE"))
             .andDo(MockMvcRestDocumentation.document("users/create",
                 requestFields(
+                    fieldWithPath("id").type(JsonFieldType.NULL).description("사용자 이름"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
-                    fieldWithPath("age").type(JsonFieldType.STRING).description("사용자 나이"),
+                    fieldWithPath("age").type(JsonFieldType.NUMBER).description("사용자 나이"),
                     fieldWithPath("gender").type(JsonFieldType.STRING).description("사용자 성별"),
                 ),
                 responseFields(
                     fieldWithPath("id").type(JsonFieldType.NUMBER).description("사용자 아이디"),
                     fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 이름"),
-                    fieldWithPath("age").type(JsonFieldType.STRING).description("사용자 나이"),
+                    fieldWithPath("age").type(JsonFieldType.NUMBER).description("사용자 나이"),
                     fieldWithPath("gender").type(JsonFieldType.STRING).description("사용자 성별"),
                 )
             ))
