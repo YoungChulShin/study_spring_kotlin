@@ -12,7 +12,7 @@ plugins {
 
 group = "study.spring"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -31,6 +31,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // RestDocs 기반 테스트 진행
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
 
@@ -47,11 +48,31 @@ tasks.withType<Test> {
 
 tasks.test {
     println("test 실행")
-    outputs.dir(snippetDir)
+//    outputs.dir(snippetDir)
 }
 
 tasks.asciidoctor {
     println("asciidoctor 실행")
     inputs.dir(snippetDir)
     dependsOn(tasks.test)
+
+    doFirst {
+        println("파일 삭제 실행")
+        delete {
+            file("src/main/resources/static/docs")
+        }
+    }
+}
+
+tasks.register("copyHTML", Copy::class) {
+    println("copyHTML 실행")
+    dependsOn(tasks.asciidoctor)
+    from(file("build/docs/asciidoc"))
+    into(file("src/main/resources/static/docs"))
+}
+
+tasks.bootJar {
+    println("bootJar 실행")
+    dependsOn(tasks.asciidoctor)
+    dependsOn(tasks.getByName("copyHTML"))
 }
